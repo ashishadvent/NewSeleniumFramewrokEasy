@@ -7,12 +7,21 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
+import org.testng.ITestContext;
+import org.testng.ITestListener;
+
+import org.testng.ITestResult;
 
 /**
  * @author ashish 
  *
  */
-public class TestListener extends AbstractWebDriverEventListener  {
+
+// To add webDriver Listeners and Test NG Listeners
+// webdriver listeners will be  triggered when any webdriver related operation will be executed like 'on Click' ,sendKeys,etc
+// TestNG Listeners will be triggered when TestNG realted like OnFinish,OnStart and OnTestFailed, etc.
+
+public class TestListener extends AbstractWebDriverEventListener implements ITestListener{
 	
 	
 	
@@ -77,6 +86,53 @@ public class TestListener extends AbstractWebDriverEventListener  {
 	}
 
 	public void afterScript(String script, WebDriver driver) {
+	}
+
+	@Override
+	public void onFinish(ITestContext arg0) {
+		// TODO Auto-generated method stub
+		System.out.println(("*** Test Suite " + arg0.getName() + " ending ***"));
+		ExtentTestManager.endTest();
+		ExtentManager.getInstance().flush();
+	}
+
+	@Override
+	public void onStart(ITestContext arg0) {
+		// TODO Auto-generated method stub
+		System.out.println("*** Test Suite " + arg0.getName() + " started ***");
+		 
+		
+	}
+
+	@Override
+	public void onTestFailedButWithinSuccessPercentage(ITestResult arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTestFailure(ITestResult arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTestSkipped(ITestResult arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTestStart(ITestResult arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTestSuccess(ITestResult arg0) {
+		// TODO Auto-generated method stub
+		
+		
 	}
 
 }

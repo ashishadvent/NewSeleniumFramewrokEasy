@@ -3,13 +3,17 @@
  */
 package utilityLibraries;
 
+import java.io.File;
+
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 
+
+
 /**
  * @author ashish
- *
+ *                                       
  */
 public class ExtentManager {
 	private static ExtentReports extentreport;
@@ -18,9 +22,9 @@ public class ExtentManager {
 	private static String fileLocation=System.getProperty("user.dir")+fileSeparator+"TestReport";
 	private static String FileCompletePath=fileLocation+fileSeparator+reportFileName;
 	
-	public ExtentReports getInstance() {
+	public static ExtentReports getInstance() {
 		if(extentreport==null)
-			createInstance();
+			createInstance(); 
 		return extentreport;
 	}
 
@@ -50,7 +54,23 @@ public class ExtentManager {
 
 	private static String getReportPath(String fileLocation2) {
 		// TODO Auto-generated method stub
-		return null;
-	}
+		File objDirectory=new File(fileLocation2);
+		if (!objDirectory.exists()) {
+			if(objDirectory.mkdir()) {
+				System.out.println("Directory has been created");
+				return fileLocation2;
+			}
+			else {
+				System.out.println("Unable to create directory");
+				return System.getProperty("user.dir");
+			}
+		}    
+			else {
+				System.out.println("Directory already exists");
+				return fileLocation2;
+			}
+		
+		}
+	
 
 }
