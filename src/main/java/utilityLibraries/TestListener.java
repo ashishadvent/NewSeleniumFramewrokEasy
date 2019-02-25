@@ -3,6 +3,9 @@
  */
 package utilityLibraries;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,6 +14,8 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 
 import org.testng.ITestResult;
+
+import com.aventstack.extentreports.Status;
 
 /**
  * @author ashish 
@@ -101,38 +106,57 @@ public class TestListener extends AbstractWebDriverEventListener implements ITes
 		// TODO Auto-generated method stub
 		System.out.println("*** Test Suite " + arg0.getName() + " started ***");
 		 
+		 
 		
 	}
 
 	@Override
 	public void onTestFailedButWithinSuccessPercentage(ITestResult arg0) {
 		// TODO Auto-generated method stub
+		System.out.println("*** Test Falied but within percentage % " + arg0.getMethod().getMethodName());
 		
 	}
 
 	@Override
 	public void onTestFailure(ITestResult arg0) {
 		// TODO Auto-generated method stub
+		System.out.println("*** Test Execution failed  "+ arg0.getMethod().getMethodName()+ "now taking screenshot");
+		ITestContext context= arg0.getTestContext();
+		WebDriver driver=(WebDriver) context.getAttribute("driver");
+		String targetLocation=null;
+		String  testClassName= arg0.getInstanceName().toString().trim();
+		String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+		
+		
 		
 	}
 
 	@Override
 	public void onTestSkipped(ITestResult arg0) {
 		// TODO Auto-generated method stub
+		System.out.println("*** Test -" + arg0.getMethod().getMethodName() +"Skipped ");
+		ExtentTestManager.getTest().log(Status.SKIP, "test Skipped");
 		
 	}
 
 	@Override
 	public void onTestStart(ITestResult arg0) {
 		// TODO Auto-generated method stub
+		System.out.println(("*** Running test method " + arg0.getMethod().getMethodName() + "..."));
+		ExtentTestManager.startTest(arg0.getMethod().getMethodName());
 		
 	}
 
 	@Override
 	public void onTestSuccess(ITestResult arg0) {
 		// TODO Auto-generated method stub
-		
-		
+		System.out.println("*** Executed Test " + arg0.getMethod().getMethodName() + "Successfully");
+		ExtentTestManager.getTest().log(Status.PASS, "Test Passed ");
+			
 	}
+	
+	
+	
+	
 
 }
