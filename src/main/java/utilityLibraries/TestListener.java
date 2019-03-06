@@ -3,10 +3,14 @@
  */
 package utilityLibraries;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.FileHandler;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
@@ -16,6 +20,8 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 
 import com.aventstack.extentreports.Status;
+
+import net.bytebuddy.dynamic.TargetType;
 
 /**
  * @author ashish 
@@ -123,9 +129,44 @@ public class TestListener extends AbstractWebDriverEventListener implements ITes
 		System.out.println("*** Test Execution failed  "+ arg0.getMethod().getMethodName()+ "now taking screenshot");
 		ITestContext context= arg0.getTestContext();
 		WebDriver driver=(WebDriver) context.getAttribute("driver");
+		
 		String targetLocation=null;
 		String  testClassName= arg0.getInstanceName().toString().trim();
 		String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+		String testMethodName= arg0.getName().toString().trim();
+		String screenShotName= testMethodName+timeStamp +".png";
+		String fileSeparator=System.getProperty("file.separator");
+		String reportPath=System.getProperty("user.dir")+fileSeparator +"TestReport"+fileSeparator+"ScreenShots";
+		System.out.println("ScreenShot Report Path =" +reportPath );
+		
+		try {
+			File file=new File(reportPath+fileSeparator+testClassName);
+			if (!file.exists()) {
+				if(file.mkdirs()) {
+					System.out.println("Directory "+file.getAbsolutePath()+"crated successfully");
+				}
+				else {
+					System.out.println("Error occurs while creating Directory "+file.getAbsolutePath());
+				}
+			  	
+			}
+			File screenshotFile=((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+			targetLocation= reportPath+fileSeparator+testClassName+fileSeparator+screenShotName;
+			
+			File targetFile=new File(targetLocation);
+			
+			System.out.println("Screenshot location"+screenshotFile.getAbsolutePath() );
+			System.out.println("Saved screenshot location "+ file.getAbsolutePath());
+			//FileUtils.copyFile(screenshotFile,targetFile);
+			
+			
+			//locate the location
+			
+			
+			
+		}catch(Exception e) {
+			
+		}
 		
 		
 		
