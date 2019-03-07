@@ -4,10 +4,13 @@
 package utilityLibraries;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.FileHandler;
 
+
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -19,9 +22,11 @@ import org.testng.ITestListener;
 
 import org.testng.ITestResult;
 
+import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
 
-import net.bytebuddy.dynamic.TargetType;
+
+
 
 /**
  * @author ashish 
@@ -157,14 +162,30 @@ public class TestListener extends AbstractWebDriverEventListener implements ITes
 			
 			System.out.println("Screenshot location"+screenshotFile.getAbsolutePath() );
 			System.out.println("Saved screenshot location "+ file.getAbsolutePath());
-			//FileUtils.copyFile(screenshotFile,targetFile);
+			FileUtils.copyFile(screenshotFile,targetFile);
 			
 			
 			//locate the location
 			
 			
 			
-		}catch(Exception e) {
+		}catch(FileNotFoundException e) {
+			System.out.println("File not found Exception occurs while taking screenshot"+e.getMessage());
+						
+		}
+		catch(Exception e) {
+			System.out.println("Exception occurs while taking screenshot"+e.getMessage());
+			
+		}
+		//attach screenshot to report
+		
+		try {
+			ExtentTestManager.getTest().fail("Screenshot",MediaEntityBuilder.createScreenCaptureFromPath(targetLocation).build());
+			
+		}
+		catch(IOException e){
+			System.out.println("An Exception occurs while taking screenshot"+e.getCause());
+			ExtentTestManager.getTest().log(Status.FAIL, "Test Failed");
 			
 		}
 		
