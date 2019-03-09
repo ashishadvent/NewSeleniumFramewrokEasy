@@ -125,13 +125,14 @@ public class TestListener extends AbstractWebDriverEventListener implements ITes
 	public void onTestFailedButWithinSuccessPercentage(ITestResult arg0) {
 		// TODO Auto-generated method stub
 		System.out.println("*** Test Falied but within percentage % " + arg0.getMethod().getMethodName());
-		
+		ExecutionLog.info("*** Test Falied but within percentage % " + arg0.getMethod().getMethodName());
 	}
 
 	@Override
 	public void onTestFailure(ITestResult arg0) {
 		// TODO Auto-generated method stub
 		System.out.println("*** Test Execution failed  "+ arg0.getMethod().getMethodName()+ "now taking screenshot");
+		ExecutionLog.info("*** Test Execution failed  "+ arg0.getMethod().getMethodName()+ "now taking screenshot");
 		ITestContext context= arg0.getTestContext();
 		WebDriver driver=(WebDriver) context.getAttribute("driver");
 		
@@ -143,15 +144,18 @@ public class TestListener extends AbstractWebDriverEventListener implements ITes
 		String fileSeparator=System.getProperty("file.separator");
 		String reportPath=System.getProperty("user.dir")+fileSeparator +"TestReport"+fileSeparator+"ScreenShots";
 		System.out.println("ScreenShot Report Path =" +reportPath );
+		ExecutionLog.info("ScreenShot Report Path =" +reportPath );
 		
 		try {
 			File file=new File(reportPath+fileSeparator+testClassName);
 			if (!file.exists()) {
 				if(file.mkdirs()) {
 					System.out.println("Directory "+file.getAbsolutePath()+"crated successfully");
+					ExecutionLog.info("Directory "+file.getAbsolutePath()+"crated successfully");
 				}
 				else {
 					System.out.println("Error occurs while creating Directory "+file.getAbsolutePath());
+					ExecutionLog.error("Error occurs while creating Directory "+file.getAbsolutePath());
 				}
 			  	
 			}
@@ -161,7 +165,9 @@ public class TestListener extends AbstractWebDriverEventListener implements ITes
 			File targetFile=new File(targetLocation);
 			
 			System.out.println("Screenshot location"+screenshotFile.getAbsolutePath() );
+			ExecutionLog.info("Screenshot location"+screenshotFile.getAbsolutePath() );
 			System.out.println("Saved screenshot location "+ file.getAbsolutePath());
+			ExecutionLog.info("Saved screenshot location "+ file.getAbsolutePath());
 			FileUtils.copyFile(screenshotFile,targetFile);
 			
 			
@@ -171,10 +177,12 @@ public class TestListener extends AbstractWebDriverEventListener implements ITes
 			
 		}catch(FileNotFoundException e) {
 			System.out.println("File not found Exception occurs while taking screenshot"+e.getMessage());
+			ExecutionLog.info("File not found Exception occurs while taking screenshot"+e.getMessage());
 						
 		}
 		catch(Exception e) {
 			System.out.println("Exception occurs while taking screenshot"+e.getMessage());
+			ExecutionLog.info("Exception occurs while taking screenshot"+e.getMessage());
 			
 		}
 		//attach screenshot to report
@@ -185,6 +193,7 @@ public class TestListener extends AbstractWebDriverEventListener implements ITes
 		}
 		catch(IOException e){
 			System.out.println("An Exception occurs while taking screenshot"+e.getCause());
+			ExecutionLog.info("An Exception occurs while taking screenshot"+e.getCause());
 			ExtentTestManager.getTest().log(Status.FAIL, "Test Failed");
 			
 		}
@@ -197,6 +206,7 @@ public class TestListener extends AbstractWebDriverEventListener implements ITes
 	public void onTestSkipped(ITestResult arg0) {
 		// TODO Auto-generated method stub
 		System.out.println("*** Test -" + arg0.getMethod().getMethodName() +"Skipped ");
+		ExecutionLog.info("*** Test -" + arg0.getMethod().getMethodName() +"Skipped ");
 		ExtentTestManager.getTest().log(Status.SKIP, "test Skipped");
 		
 	}
@@ -204,7 +214,8 @@ public class TestListener extends AbstractWebDriverEventListener implements ITes
 	@Override
 	public void onTestStart(ITestResult arg0) {
 		// TODO Auto-generated method stub
-		System.out.println(("*** Running test method " + arg0.getMethod().getMethodName() + "..."));
+		System.out.println("*** Running test method " + arg0.getMethod().getMethodName() + "...");
+		ExecutionLog.info("*** Running test method " + arg0.getMethod().getMethodName() + "...");
 		ExtentTestManager.startTest(arg0.getMethod().getMethodName());
 		
 	}
@@ -213,6 +224,7 @@ public class TestListener extends AbstractWebDriverEventListener implements ITes
 	public void onTestSuccess(ITestResult arg0) {
 		// TODO Auto-generated method stub
 		System.out.println("*** Executed Test " + arg0.getMethod().getMethodName() + "Successfully");
+		ExecutionLog.info("*** Executed Test " + arg0.getMethod().getMethodName() + "Successfully");
 		ExtentTestManager.getTest().log(Status.PASS, "Test Passed ");
 			
 	}
